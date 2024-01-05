@@ -1,0 +1,27 @@
+<div class="navbar__component">
+    <div class="navbar__container container mx-auto">
+        <div class="navbar__wrapper flex items-center justify-between px-8 py-8">
+            <div class="navbar__left__wrapper flex items-center justify-between gap-10">
+                <div class="navbar__logo">
+                    <a routerLink="/">
+                        <img class="h-10" [src]="logo" alt="MyRH recruitement">
+                    </a>
+                </div>
+                <div class="navbar__navigation">
+                    <ul class="navbar__navigation__menu flex items-center gap-5">
+                        <li class="navbar__navigation__item"><a href="#" class="navbar__navu">Home</a></li>
+                        <li class="navbar__navigation__item"><a href="#" class="navbar__navu">Company reviews</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="navbar__right__wrapper">
+                <div class="navbar__auth__navigation">
+                    <a routerLink="/auth" class="capitalize">
+                        <app-button>sign in</app-button>
+                    </a>
+                </div>
+                <div class="navbar__info hidden">hello</div>
+            </div>
+        </div>
+    </div>
+</div>
