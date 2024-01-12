@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApplicationService } from '@app/shared/services';
+import {isBoolean} from "@ngrx/store/src/meta-reducers/utils";
 
 @Component({
   selector: 'app-apply-page',
@@ -108,6 +109,8 @@ export class ApplyPageComponent implements OnInit {
     formData.append('jobSeeker.identity', this.formInputs.identity.value);
     formData.append('jobSeeker.resume', this.file);
     formData.append('jobOffer.id', this.jobOfferId);
+    formData.append('statusPostulation', 'PENDING');
+    formData.append('isOnline', 'false');
 
     this._applicationService.create(formData).subscribe({
       next: (res) => {
@@ -116,11 +119,11 @@ export class ApplyPageComponent implements OnInit {
         }
       },
       error: ({error}) => {
-        this.message = { message: error.body.detail, status: "error"}        
+        this.message = { message: error.body.detail, status: "error"}
       },
       complete: () => {}
     });
-    
+
   }
 
 }

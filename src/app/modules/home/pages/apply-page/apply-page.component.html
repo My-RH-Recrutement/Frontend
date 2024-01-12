@@ -12,6 +12,7 @@
                     <app-input [input]="formInputs.email"></app-input>
                     <app-input [input]="formInputs.phone"></app-input>
                     <app-input [input]="formInputs.identity"></app-input>
+
                     <div class="input__c__wrapper flex flex-col items-start col-span-2">
                         <label [for]="formInputs.motivationLetter.id" class="mb-1 text-base font-bold">{{formInputs.motivationLetter.label}} <span
                                 class="text-red-700" *ngIf="formInputs.motivationLetter.required">*</span></label>
