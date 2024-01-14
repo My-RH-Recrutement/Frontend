@@ -12,7 +12,8 @@ export type InputType = {
     label: string,
     formControll: string,
     onChange: any,
-    required: boolean
+    required: boolean,
+    error?: string | null | undefined
 };
 
 export type Table = [

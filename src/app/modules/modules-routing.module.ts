@@ -11,6 +11,10 @@ import { ApplicationsComponent } from "./recruiter/pages/applications/applicatio
 import { CreateJobComponent } from "./recruiter/pages/create-job/create-job.component";
 import { JobsListComponent } from "./recruiter/pages/jobs-list/jobs-list.component";
 import { ApplyPageComponent } from "./home/pages/apply-page/apply-page.component";
+import { LoginComponent } from "@modules/auth/pages/login/login.component";
+import { authenticationGuard, authorizationGuard } from "@core/guards";
+import { NotAuthorizedPageComponent } from "./errors/pages/not-authorized-page/not-authorized-page.component";
+import { NotFoundComponent } from "@modules/errors/pages/not-found/not-found.component";
 
 const moduleRoutes: Routes = [
     {
@@ -19,6 +23,11 @@ const moduleRoutes: Routes = [
         children: [
             {
                 path: "",
+                redirectTo: "job-offers",
+                pathMatch: "full",
+            },
+            {
+                path: "job-offers",
                 component: JobOffersComponent
             },
             {
@@ -27,7 +36,8 @@ const moduleRoutes: Routes = [
             },
             {
                 path: 'job-offers/:id/apply',
-                component: ApplyPageComponent
+                component: ApplyPageComponent,
+                canActivate: [authenticationGuard]
             }
         ]
     },
@@ -40,6 +50,10 @@ const moduleRoutes: Routes = [
                 component: SignupComponent
             },
             {
+                path: "login",
+                component: LoginComponent
+            },
+            {
                 path: "verify",
                 component: VerifyCodeComponent
             }
@@ -48,6 +62,8 @@ const moduleRoutes: Routes = [
     {
         path: "recruiter",
         component: DashboardComponent,
+        canActivate: [authenticationGuard, authorizationGuard],
+        // data: {role: Access.RECRUITER},
         children: [
             {
                 path: "jobs",
@@ -68,6 +84,19 @@ const moduleRoutes: Routes = [
                 component: ApplicationsComponent
             }
         ]
+    },
+    {
+        path: "**",
+        redirectTo: "not-found",
+        pathMatch: "full"
+    },
+    {
+        path: "not-authorized",
+        component: NotAuthorizedPageComponent
+    },
+    {
+        path: "not-found",
+        component: NotFoundComponent
     }
 ];
 

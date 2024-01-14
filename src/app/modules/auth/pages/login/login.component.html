@@ -1,0 +1,29 @@
+<div class="signup__page">
+    <div class="signup__page__container">
+        <div class="signup__page__wrapper flex flex-col gap-6 border border-[#d4d2d0] rounded-lg bg-white p-6">
+            <div class="signup__info">
+                <h1 class="mb-2 text-xl text-[#2D2D2D] font-bold">Ready to take the next step?</h1>
+                <span class="text-base text-[#595959]">Create an account or sign in.</span>
+            </div>
+            <div class="signup__inputs">
+                <form class="grid grid-cols-1 gap-6">
+                    <app-input [input]="formInputs.email"></app-input>
+                    <app-input [input]="formInputs.password"></app-input>
+                    <div class="submit__btn">
+                        <app-button [clickEvent]="login">
+                            Continue <i class='bx bx-right-arrow-alt text-lg'></i>
+                        </app-button>
+                    </div>
+                    <div class="form__footer">
+                        <p>New to our plateform?
+                            <a routerLink="/auth"
+                                class="capitalize text-[#2557a7] font-medium border-b border-dotted border-[#2557a7]">
+                                Create free account
+                            </a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
