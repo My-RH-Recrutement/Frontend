@@ -15,6 +15,8 @@ import { LoginComponent } from "@modules/auth/pages/login/login.component";
 import { authenticationGuard, authorizationGuard } from "@core/guards";
 import { NotAuthorizedPageComponent } from "./errors/pages/not-authorized-page/not-authorized-page.component";
 import { NotFoundComponent } from "@modules/errors/pages/not-found/not-found.component";
+import { PlansComponent } from "./plans/pages/plans/plans.component";
+import { enableDebugTools } from "@angular/platform-browser";
 
 const moduleRoutes: Routes = [
     {
@@ -63,7 +65,6 @@ const moduleRoutes: Routes = [
         path: "recruiter",
         component: DashboardComponent,
         canActivate: [authenticationGuard, authorizationGuard],
-        // data: {role: Access.RECRUITER},
         children: [
             {
                 path: "jobs",
@@ -86,17 +87,22 @@ const moduleRoutes: Routes = [
         ]
     },
     {
-        path: "**",
-        redirectTo: "not-found",
-        pathMatch: "full"
+        path: "plans",
+        component: PlansComponent
     },
     {
         path: "not-authorized",
-        component: NotAuthorizedPageComponent
+        component: NotAuthorizedPageComponent,
+        canActivate: [authenticationGuard]
     },
     {
         path: "not-found",
         component: NotFoundComponent
+    },
+    {
+        path: "**",
+        redirectTo: "not-found",
+        pathMatch: "full"
     }
 ];
 

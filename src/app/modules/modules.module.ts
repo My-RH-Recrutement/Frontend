@@ -1,20 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ModulesRoutingModule } from './modules-routing.module';
+import { ModulesRoutingModule } from '@modules/modules-routing.module';
 import { SharedModule } from '@shared/shared.module';
 import { HomeModule } from '@modules/home/home.module';
-import { AuthModule } from './auth/auth.module';
-import { RecruiterModule } from './recruiter/recruiter.module';
-import { NotAuthorizedPageComponent } from './errors/pages/not-authorized-page/not-authorized-page.component';
-import { NotFoundComponent } from './errors/pages/not-found/not-found.component';
+import { AuthModule } from '@modules/auth/auth.module';
+import { RecruiterModule } from '@modules/recruiter/recruiter.module';
 import { RouterModule } from '@angular/router';
+import { PlansModule } from '@modules/plans/plans.module';
+import { ErrorsModule } from '@modules/errors/errors.module';
 
 
 
 @NgModule({
   declarations: [
-    NotAuthorizedPageComponent,
-    NotFoundComponent
+    
   ],
   imports: [
     CommonModule,
@@ -23,6 +22,8 @@ import { RouterModule } from '@angular/router';
     HomeModule,
     AuthModule,
     RecruiterModule,
+    PlansModule,
+    ErrorsModule,
     RouterModule
   ]
 })

@@ -48,11 +48,9 @@ export class AuthService {
     const token = JSON.parse((localStorage.getItem("token") as string));
     if (token) {
       this.loadUserProfile({"token": token});
-      if (this.roles.includes(Access.RECRUITER)) {
-        this._router.navigate(["/recruiter/jobs"]);
-      }else {
-        this._router.navigate(["/"])
-      }
+      // if (this.roles.includes(Access.RECRUITER)) {
+      //   this._router.navigate(["/recruiter/jobs"]);
+      // }
     }
   }
 }

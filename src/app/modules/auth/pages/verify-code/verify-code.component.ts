@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { VerificationCode } from '@app/core/models/verification-code';
 import { RecruiterService } from '@app/shared/services';
 import { InputType } from '@app/shared/types';
+import { Stripe } from '@stripe/stripe-js';
 
 @Component({
   selector: 'app-verify-code',
@@ -10,7 +11,7 @@ import { InputType } from '@app/shared/types';
   styleUrls: ['./verify-code.component.less']
 })
 export class VerifyCodeComponent {
-
+  stripe!: Stripe;
   constructor(private _recruiterService: RecruiterService, private _router: Router) {}
 
   verifyInput: InputType = {
@@ -30,8 +31,20 @@ export class VerifyCodeComponent {
     this._recruiterService.verifyAccount(verificatioCode).subscribe({
       next: (res) => {
         console.log(res);
-        localStorage.setItem("recruiter", JSON.stringify(res.id));
-        this._router.navigate(["/recruiter/jobs"]);
+        // this._router.navigate(["/plans"]);
+        // (<any>window).Stripe.card.createToken({
+        //   number: form.cardNumber.value,
+        //   exp_month: form.expMonth.value,
+        //   exp_year: form.expYear.value,
+        //   cvc: form.cvc.value
+        // }, (status: number, response: any) => {
+        //   if (status === 200) {
+        //     let token = response.id;
+        //     this.chargeCard(token);
+        //   } else {
+        //     console.log(response.error.message);
+        //   }
+        // });
       },
       error: (error) => {
         console.log(error);
