@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from '@app/app-routing.module';
@@ -9,6 +9,10 @@ import { SharedModule } from '@shared/shared.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppHttpInterceptor } from '@core/interceptors';
 import { AngularToastifyModule } from 'angular-toastify';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { AuthStateModule } from './ngrx/auth/auth.state.module';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -20,7 +24,11 @@ import { AngularToastifyModule } from 'angular-toastify';
     ModulesModule,
     CoreModule,
     SharedModule,
-    AngularToastifyModule
+    AngularToastifyModule,
+    StoreModule.forRoot(),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode(), autoPause: true, trace: false, traceLimit: 75 }),
+    AuthStateModule,
+    EffectsModule.forRoot([])
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AppHttpInterceptor, multi: true}

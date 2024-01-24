@@ -12,6 +12,6 @@ export class AppComponent implements OnInit {
   constructor(private _authService: AuthService) {}
 
   ngOnInit(): void {
-    this._authService.loadTokenFromSessionStorage();
+    // this._authService.loadTokenFromSessionStorage();
   }
 }

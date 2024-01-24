@@ -1,0 +1,80 @@
+import { createFeature, createReducer, on } from "@ngrx/store";
+import { AuthStateInterface } from "./authState.interface";
+import { authPageActions } from "./actions/auth-page.actions";
+import { authApiActions } from "./actions/auth-api.actions";
+
+const initialState: AuthStateInterface = {
+    user: undefined,
+    isLoggedIn: false,
+    isSubmitting: false,
+    isLoading: false,
+    validationErrors: null
+}
+
+const authFeature = createFeature({
+    name: "auth",
+    reducer: createReducer(
+        initialState,
+        on(authPageActions.register, state => ({ 
+            ...state, 
+            isSubmitting: true,
+            isLoading: true,
+            validationErrors: null
+        })),
+        on(authApiActions.registerSuccess, (state, action) => ({
+            ...state,
+            isSubmitting: false,
+            isLoading: false,
+            isLoggedIn: true,
+            user: {email: action.email, token: action.token, username: action.username, role: action.role},
+        })),
+        on(authApiActions.registerFailure, (state, action) => ({
+            ...state,
+            isSubmitting: false,
+            isLoading: false,
+            user: undefined,
+            isLoggedIn: false,
+            validationErrors: action.errors
+        })),
+        on(authPageActions.login, state => ({
+            ...state,
+            isSubmitting: true,
+            isLoading: true,
+            isLoggedIn: false,
+            validationErrors: null
+        })),
+        on(authApiActions.loginSuccess, (state, action) => ({
+            ...state,
+            isSubmitting: false,
+            isLoading: false,
+            isLoggedIn: true,
+            user: { email: action.email, token: action.token, username: action.username, role: action.role }
+        })),
+        on(authApiActions.loginFailure, (state, action) => ({
+            ...state,
+            isSubmitting: false,
+            isLoading: false,
+            isLoggedIn: false,
+            user: undefined,
+            validationErrors: action.errors
+        })),
+        on(authPageActions.logout, state => ({
+            ...state,
+            isSubmitting: false,
+            isLoading: false,
+            isLoggedIn: false,
+            user: null,
+            validationErrors: null
+        }))
+    )
+})
+
+export const {
+    name: authFeatureKey,
+    reducer: authReducer,
+    selectIsSubmitting,
+    selectIsLoggedIn,
+    selectIsLoading,
+    selectUser,
+    selectValidationErrors
+} = authFeature;

@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Access } from '@app/core/enums/access';
-import { AuthResponse } from '@app/core/interfaces/auth-response.interface';
+import { LoginRequestInterface } from '@app/core/interfaces/requests/login-request.interface';
+import { RegisterRequestInterface } from '@core/interfaces/requests/register-request.interface';
+import { AuthResponse } from '@core/interfaces/responses/auth-response.interface';
 import { environment } from 'environments/environment.development';
 import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
@@ -19,38 +20,24 @@ export class AuthService {
   username!: string | undefined;
   accessToken!: string | undefined;
 
-  public register(body: any): Observable<AuthResponse> {
-    return this._http.post<AuthResponse>(`${environment.API_URL}/auth/register`, body);
+  public register(body: RegisterRequestInterface): Observable<AuthResponse> {
+    
+    const formData: FormData = new FormData();
+    formData.append("fullName", body.fullName);
+    formData.append("email", body.email);
+    formData.append("phoneNumber", body.phoneNumber);
+    formData.append("password", body.password);
+    formData.append("address", body.address);
+    formData.append("role", body.role);
+    if (body.image) formData.append("image", body.image);
+    
+    return this._http.post<AuthResponse>(`${environment.API_URL}/auth/register`, formData);
   }
 
-  public login(body: any): Observable<AuthResponse> {
-    return this._http.post<AuthResponse>(`${environment.API_URL}/auth/authenticate`, body);
-  }
-
-  public loadUserProfile(data: AuthResponse) {
-    this.isAuthenticated = true;
-    this.accessToken = data.token;
-    const decodedJwt: any = jwtDecode(this.accessToken);
-    this.username = decodedJwt.sub;
-    this.roles = decodedJwt.SCOPE;
-    localStorage.setItem("token", JSON.stringify(this.accessToken));
-  }
-
-  logout() {
-    this.isAuthenticated = false;
-    this.accessToken = undefined;
-    this.username = undefined;
-    this.roles = undefined;
-    localStorage.removeItem("token");
-  }
-
-  loadTokenFromSessionStorage() {
-    const token = JSON.parse((localStorage.getItem("token") as string));
-    if (token) {
-      this.loadUserProfile({"token": token});
-      // if (this.roles.includes(Access.RECRUITER)) {
-      //   this._router.navigate(["/recruiter/jobs"]);
-      // }
-    }
+  public login(body: LoginRequestInterface): Observable<AuthResponse> {
+    const formData: FormData = new FormData();
+    formData.append("email", body.email);
+    formData.append("password", body.password);
+    return this._http.post<AuthResponse>(`${environment.API_URL}/auth/authenticate`, formData);
   }
 }

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { authPageActions } from '@app/ngrx/auth/actions/auth-page.actions';
 import { AuthService } from '@app/shared/services/auth/auth.service';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-navbar',
@@ -9,7 +11,7 @@ import { AuthService } from '@app/shared/services/auth/auth.service';
 })
 export class NavbarComponent {
 
-  constructor(private _authService: AuthService, private _router: Router) {}
+  constructor(private _authService: AuthService, private _router: Router, private _store: Store) {}
 
   logo: string = "../../../../assets/img/logo.png";
 
@@ -23,7 +25,6 @@ export class NavbarComponent {
   }
 
   handleLogOut = () => {
-    this._authService.logout();
-    this._router.navigate(["/auth/login"]); 
+    this._store.dispatch(authPageActions.logout())
   }
 }

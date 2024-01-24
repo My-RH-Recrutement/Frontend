@@ -1,7 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Access } from '@app/core/enums/access';
+import { RegisterRequestInterface } from '@app/core/interfaces/requests/register-request.interface';
+import { authPageActions } from '@app/ngrx/auth/actions/auth-page.actions';
+import { selectIsSubmitting } from '@app/ngrx/auth/auth.reducer';
+import { AuthStateInterface } from '@app/ngrx/auth/authState.interface';
 import { AuthService } from '@app/shared/services/auth/auth.service';
+import { Store } from '@ngrx/store';
 import { ToastService } from 'angular-toastify';
 
 @Component({
@@ -11,10 +16,11 @@ import { ToastService } from 'angular-toastify';
 })
 export class SignupComponent {
 
-  constructor(private _authService: AuthService, private _router: Router, private _toast: ToastService) { }
+  constructor(private _authService: AuthService, private _router: Router, private _toast: ToastService, private _store: Store<{ auth: AuthStateInterface }>) { }
   access = Access;
   file!: File;
   role:string = this.access.USER;
+  isSubmitting = this._store.selectSignal(selectIsSubmitting);
   formInputs = {
     name: {
       id: 'fulName',
@@ -92,27 +98,24 @@ export class SignupComponent {
   }
 
   signUp = () => {
-    const formData: FormData = new FormData();
-    formData.append("fullName", this.formInputs.name.value);
-    formData.append("email", this.formInputs.email.value);
-    formData.append("phoneNumber", this.formInputs.phone.value);
-    formData.append("password", this.formInputs.password.value);
-    formData.append("address", this.formInputs.address.value);
-    formData.append("role", this.role);
-    if(this.role === this.access.RECRUITER) formData.append("image", this.file);
+    const registerRequest: RegisterRequestInterface = {
+      fullName: this.formInputs.name.value,
+      address: this.formInputs.address.value,
+      email: this.formInputs.email.value,
+      password: this.formInputs.password.value,
+      phoneNumber: this.formInputs.phone.value,
+      role: this.role
+    };
+    if (registerRequest.role === this.access.RECRUITER) registerRequest.image = this.file;
     
-    this._authService.register(formData).subscribe({
-      next: (res) => {
-        this._authService.loadUserProfile(res);
-        this._toast.success("Account created Successfully!");
-        this._router.navigate(["/auth/verify"]);
-      },
-      error: ({error}) => {
-        error?.body?.detail ? this._toast.error(error.body.detail) : false;
-        this.formInputs.name.error = error.fullName;
-        this.formInputs.email.error = error.email;
-        this.formInputs.password.error = error.password;
-      }
-    })
+    this._store.dispatch(authPageActions.register(registerRequest))
+
+    // this._authService.register(formData).subscribe({
+    //   next: (res) => {
+    //     this._authService.loadUserProfile(res);
+    //     this._toast.success("Account created Successfully!");
+    //     this._router.navigate(["/auth/verify"]);
+    //   }
+    // })
   }
 }

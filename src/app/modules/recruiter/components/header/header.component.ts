@@ -13,7 +13,6 @@ export class HeaderComponent {
   constructor(private _authService: AuthService, private _router: Router) {}
 
   handleLogOut = () => {
-    this._authService.logout();
     this._router.navigate(["/auth/login"]);
   }
 }
