@@ -129,7 +129,7 @@ export const logoutEffect = createEffect((
 export const redirectAfterRegisterEffect = createEffect(
     (actions$ = inject(Actions), router = inject(Router)) => {
         return actions$.pipe(
-            ofType(authApiActions.registerSuccess),
+            ofType(authApiActions.registerSuccess, authApiActions.loginSuccess),
             tap((action) => {
                 if(action.role === Access.RECRUITER) {
                     router.navigateByUrl("/recruiter");

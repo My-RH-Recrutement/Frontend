@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="navbar__right__wrapper flex items-center">
-                <div *ngIf="!isUserLoggedin" class="navbar__auth__navigation flex items-center space-x-8">
+                <div *ngIf="!isUserLoggedin()" class="navbar__auth__navigation flex items-center space-x-8">
                     <a routerLink="/auth" class="capitalize font-medium">
                         sign in
                     </a>
@@ -23,7 +23,7 @@
                         <app-button>Log in</app-button>
                     </a>
                 </div>
-                <div *ngIf="isUserLoggedin" class="navbar__info">
+                <div *ngIf="isUserLoggedin()" class="navbar__info">
                     <div class="hidden lg:flex lg:items-center lg:gap-6 lg:justify-end xl:col-span-4">
                         <a href="#"
                             class="ml-5 flex-shrink-0 bg-white rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

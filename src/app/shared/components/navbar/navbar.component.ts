@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { authPageActions } from '@app/ngrx/auth/actions/auth-page.actions';
+import { selectIsLoggedIn } from '@app/ngrx/auth/auth.reducer';
 import { AuthService } from '@app/shared/services/auth/auth.service';
 import { Store } from '@ngrx/store';
 
@@ -15,7 +16,7 @@ export class NavbarComponent {
 
   logo: string = "../../../../assets/img/logo.png";
 
-  isUserLoggedin: boolean = this._authService.isAuthenticated;
+  isUserLoggedin: Signal<boolean> = this._store.selectSignal(selectIsLoggedIn);
 
   isMainMenuOpen: boolean = false;
   isProfileDropDownOpen: boolean = false;
