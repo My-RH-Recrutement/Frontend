@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { Access } from '@app/core/enums/access';
 import { LoginRequestInterface } from '@app/core/interfaces/requests/login-request.interface';
 import { authPageActions } from '@app/ngrx/auth/actions/auth-page.actions';
-import { AuthService } from '@app/shared/services/auth/auth.service';
 import { Store } from '@ngrx/store';
-import { ToastService } from 'angular-toastify';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +10,7 @@ import { ToastService } from 'angular-toastify';
 })
 export class LoginComponent {
 
-  constructor(private _authService: AuthService, private _router: Router, private _toast: ToastService, private _store: Store) {}
+  constructor(private _store: Store) {}
 
   formInputs = {
     email: {
@@ -48,25 +44,6 @@ export class LoginComponent {
       email: this.formInputs.email.value,
       password: this.formInputs.password.value
     }
-
     this._store.dispatch(authPageActions.login(loginRequest))
-    // const formData: FormData = new FormData()
-    // formData.append("email", this.formInputs.email.value);
-    // formData.append("password", this.formInputs.password.value);
-    // this._authService.login(formData).subscribe({
-    //   next: (res) => {
-    //     if (this._authService.roles.includes(Access.RECRUITER)) {
-    //       this._router.navigate(["/recruiter/jobs"]);
-    //     }else {
-    //       this._router.navigate(["/"]);
-    //     }
-    //   },
-    //   error: ({error}) => {
-    //     error?.body?.detail ? this._toast.error(error.body.detail) : false;
-    //     this.formInputs.email.error = error.email;
-    //     this.formInputs.password.error = error.password;
-    //   },
-    //   complete: () => {}
-    // });
   }
 }

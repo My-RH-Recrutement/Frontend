@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { Access } from '@app/core/enums/access';
 import { RegisterRequestInterface } from '@app/core/interfaces/requests/register-request.interface';
 import { authPageActions } from '@app/ngrx/auth/actions/auth-page.actions';
 import { selectIsSubmitting } from '@app/ngrx/auth/auth.reducer';
 import { AuthStateInterface } from '@app/ngrx/auth/authState.interface';
-import { AuthService } from '@app/shared/services/auth/auth.service';
 import { Store } from '@ngrx/store';
-import { ToastService } from 'angular-toastify';
 
 @Component({
   selector: 'app-signup',
@@ -16,7 +13,7 @@ import { ToastService } from 'angular-toastify';
 })
 export class SignupComponent {
 
-  constructor(private _authService: AuthService, private _router: Router, private _toast: ToastService, private _store: Store<{ auth: AuthStateInterface }>) { }
+  constructor(private _store: Store<{ auth: AuthStateInterface }>) { }
   access = Access;
   file!: File;
   role:string = this.access.USER;
@@ -107,15 +104,6 @@ export class SignupComponent {
       role: this.role
     };
     if (registerRequest.role === this.access.RECRUITER) registerRequest.image = this.file;
-    
     this._store.dispatch(authPageActions.register(registerRequest))
-
-    // this._authService.register(formData).subscribe({
-    //   next: (res) => {
-    //     this._authService.loadUserProfile(res);
-    //     this._toast.success("Account created Successfully!");
-    //     this._router.navigate(["/auth/verify"]);
-    //   }
-    // })
   }
 }

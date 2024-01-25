@@ -1,8 +1,8 @@
-import { InjectionToken, inject } from "@angular/core";
+import { inject } from "@angular/core";
 import { AuthService } from "@app/shared/services/auth/auth.service";
-import { Actions, ROOT_EFFECTS_INIT, createEffect, ofType } from "@ngrx/effects";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { authPageActions } from "./actions/auth-page.actions";
-import { catchError, concatMap, exhaustMap, map, of, switchMap, tap } from "rxjs";
+import { catchError, concatMap, map, of, switchMap, tap } from "rxjs";
 import { authApiActions } from "./actions/auth-api.actions";
 import { HttpErrorResponse } from "@angular/common/http";
 import { PersistanceService } from "@app/shared/services/persistance.service";
@@ -38,7 +38,8 @@ export const registerEffect = createEffect((
                 catchError((errorResponse: HttpErrorResponse) => {
                     return of(
                         authApiActions.registerFailure({ 
-                            errors: errorResponse.error
+                            errors: !errorResponse.error.body ? errorResponse.error : null,
+                            errorMessage: { message: errorResponse.error?.body?.detail }
                         }))
                 })
             )
@@ -75,7 +76,8 @@ export const loginEffect = createEffect((
                 catchError((errorResponse: HttpErrorResponse) => {
                     return of(
                         authApiActions.loginFailure({
-                            errors: errorResponse.error
+                            errors: !errorResponse.error.body ? errorResponse.error : null,
+                            errorMessage: {message: errorResponse.error?.body?.detail}
                         })
                         )
                 })
@@ -116,7 +118,7 @@ export const logoutEffect = createEffect((
 
 
 /**
- * Redirection Effect
+ * Redirection After Registration Effect
  * 
  * this effect handles the process of redirections after a succesfull registration by
  * intercepting the registerSuccess action, and navigate to the appropriate route based
@@ -129,10 +131,10 @@ export const logoutEffect = createEffect((
 export const redirectAfterRegisterEffect = createEffect(
     (actions$ = inject(Actions), router = inject(Router)) => {
         return actions$.pipe(
-            ofType(authApiActions.registerSuccess, authApiActions.loginSuccess),
+            ofType(authApiActions.registerSuccess),
             tap((action) => {
                 if(action.role === Access.RECRUITER) {
-                    router.navigateByUrl("/recruiter");
+                    router.navigateByUrl("/plans");
                 }else {
                     router.navigateByUrl("/");
                 }
@@ -140,3 +142,31 @@ export const redirectAfterRegisterEffect = createEffect(
         )
     }, {functional: true, dispatch: false}
 )
+
+
+/**
+ * Redirection After Login Effect
+ * 
+ * this effect handles the process of redirections after a succesfull sign in by
+ * intercepting the loginSuccess action, and navigate to the appropriate route based
+ * on the user's role.
+ * 
+ * @param actions$ - The stream of actions in the application.
+ * @param router - The injected Router service for navigation.
+ * @returns An Observable with no dispatched actions (dispatch: false) 
+ */
+export const redirectAfterLoginEffect = createEffect((
+    actions$ = inject(Actions),
+    router = inject(Router)
+) => {
+    return actions$.pipe(
+        ofType(authApiActions.loginSuccess),
+        tap((action) => {
+            if (action.role === Access.RECRUITER) {
+                router.navigateByUrl("/recruiter");
+            }else {
+                router.navigateByUrl("/");
+            }
+        })
+    )
+}, {functional: true});

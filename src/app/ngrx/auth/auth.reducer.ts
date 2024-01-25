@@ -8,7 +8,8 @@ const initialState: AuthStateInterface = {
     isLoggedIn: false,
     isSubmitting: false,
     isLoading: false,
-    validationErrors: null
+    validationErrors: null,
+    errorMessage: null
 }
 
 const authFeature = createFeature({
@@ -34,7 +35,8 @@ const authFeature = createFeature({
             isLoading: false,
             user: undefined,
             isLoggedIn: false,
-            validationErrors: action.errors
+            validationErrors: action.errors,
+            errorMessage: action.errorMessage
         })),
         on(authPageActions.login, state => ({
             ...state,
@@ -56,7 +58,8 @@ const authFeature = createFeature({
             isLoading: false,
             isLoggedIn: false,
             user: undefined,
-            validationErrors: action.errors
+            validationErrors: action.errors,
+            errorMessage: action.errorMessage
         })),
         on(authPageActions.logout, state => ({
             ...state,

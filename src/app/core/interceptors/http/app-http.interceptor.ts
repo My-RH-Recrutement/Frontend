@@ -9,16 +9,19 @@ import {
 import { Observable, catchError, throwError } from 'rxjs';
 import { AuthService } from '@app/shared/services/auth/auth.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectUser } from '@app/ngrx/auth/auth.reducer';
 
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
 
-  constructor(private _authService: AuthService, private _router: Router) {}
+  constructor(private _authService: AuthService, private _router: Router, private _store: Store) {}
   
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if (!request.url.includes("auth") && request.url !== "http://localhost:8081/api/v1/joboffers") {      
+    if (!request.url.includes("auth") && request.url !== "http://localhost:8081/api/v1/joboffers") {  
+      const user = this._store.selectSignal(selectUser);
       let newRequest = request.clone({
-        headers: request.headers.set("Authorization", `Bearer ${this._authService.accessToken}`)
+        headers: request.headers.set("Authorization", `Bearer ${user()?.token}`)
       });
       return next.handle(newRequest).pipe(
         catchError((error: any) => {
