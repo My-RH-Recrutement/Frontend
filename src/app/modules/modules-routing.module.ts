@@ -17,6 +17,7 @@ import { NotAuthorizedPageComponent } from "./errors/pages/not-authorized-page/n
 import { NotFoundComponent } from "@modules/errors/pages/not-found/not-found.component";
 import { PlansComponent } from "./plans/pages/plans/plans.component";
 import { enableDebugTools } from "@angular/platform-browser";
+import { CheckoutComponent } from "./plans/pages/checkout/checkout.component";
 
 const moduleRoutes: Routes = [
     {
@@ -89,6 +90,11 @@ const moduleRoutes: Routes = [
     {
         path: "plans",
         component: PlansComponent
+    },
+    {
+        path: "checkout",
+        component: CheckoutComponent,
+        canActivate: [authenticationGuard, authorizationGuard]
     },
     {
         path: "not-authorized",

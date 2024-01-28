@@ -1,31 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { Pack } from '@app/core/models/pack';
-import { PackService } from '@app/shared/services/pack/pack.service';
+import { plansPageActions } from '@app/ngrx/plans/actions/plans-page.actions';
+import { selectCollection } from '@app/ngrx/plans/plans.reducer';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-plans',
   templateUrl: './plans.component.html',
   styleUrls: ['./plans.component.less']
 })
-export class PlansComponent{
+export class PlansComponent implements OnInit{
 
-  packs!: Pack[];
-
-  constructor(private _packService: PackService) {}
-  
-  ngOnInit(): void {
-    this._packService.getAllPacks().subscribe({
-      next: (response) => {
-        console.log(response);
-        
-        this.packs = response;
-      },
-      error: (error) => {
-        console.log(error);
-      },
-      complete: () => {}
-    })
+  packs = this._store.selectSignal(selectCollection);
+  constructor(private _store: Store) {
   }
-
-
+  
+  async ngOnInit() {
+    this._store.dispatch(plansPageActions.enter())
+  }
 }

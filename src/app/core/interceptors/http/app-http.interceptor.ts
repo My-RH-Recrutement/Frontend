@@ -25,6 +25,8 @@ export class AppHttpInterceptor implements HttpInterceptor {
       });
       return next.handle(newRequest).pipe(
         catchError((error: any) => {
+          console.log(error);
+          
           if (error instanceof HttpErrorResponse && error.status === 401) {
             this._router.navigate(["/not-authorized"]);
           }

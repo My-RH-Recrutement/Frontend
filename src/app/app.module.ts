@@ -12,7 +12,9 @@ import { AngularToastifyModule } from 'angular-toastify';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AuthStateModule } from './ngrx/auth/auth.state.module';
+import { PlansStateModule } from './ngrx/plans/plans.state.module';
 import { EffectsModule } from '@ngrx/effects';
+import { PaymentStateModule } from './ngrx/payment/payment.state.module';
 
 @NgModule({
   declarations: [
@@ -26,9 +28,11 @@ import { EffectsModule } from '@ngrx/effects';
     SharedModule,
     AngularToastifyModule,
     StoreModule.forRoot(),
+    EffectsModule.forRoot(),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode(), autoPause: true, trace: false, traceLimit: 75 }),
     AuthStateModule,
-    EffectsModule.forRoot([])
+    PlansStateModule,
+    PaymentStateModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AppHttpInterceptor, multi: true}

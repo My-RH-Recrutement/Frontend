@@ -6,7 +6,7 @@
                     <h1 class="py-2 text-2xl font-bold border-b-4 border-[#2557a7]">Our Plans</h1>
                 </div>
                 <div class="plans grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 items-center">
-                    <app-plan-card *ngFor="let pack of packs" [pack]="pack"></app-plan-card>
+                    <app-plan-card *ngFor="let pack of packs()" [pack]="pack"></app-plan-card>
                 </div>
             </main>
         </div>
