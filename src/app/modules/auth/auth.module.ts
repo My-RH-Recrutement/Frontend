@@ -7,6 +7,7 @@ import { SharedModule } from '@app/shared/shared.module';
 import { VerifyCodeComponent } from '@modules/auth/pages/verify-code/verify-code.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './pages/login/login.component';
+import { VerifyAccountComponent } from './pages/verify-account/verify-account.component';
 
 
 
@@ -15,7 +16,8 @@ import { LoginComponent } from './pages/login/login.component';
     AuthComponent,
     SignupComponent,
     VerifyCodeComponent,
-    LoginComponent
+    LoginComponent,
+    VerifyAccountComponent
   ],
   imports: [
     CommonModule,

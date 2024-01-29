@@ -27,7 +27,7 @@ const authFeature = createFeature({
             isSubmitting: false,
             isLoading: false,
             isLoggedIn: true,
-            user: {email: action.email, token: action.token, username: action.username, role: action.role},
+            user: { email: action.email, token: action.token, username: action.username, role: action.role, verified: action.verified },
         })),
         on(authApiActions.registerFailure, (state, action) => ({
             ...state,
@@ -50,7 +50,7 @@ const authFeature = createFeature({
             isSubmitting: false,
             isLoading: false,
             isLoggedIn: true,
-            user: { email: action.email, token: action.token, username: action.username, role: action.role }
+            user: { email: action.email, token: action.token, username: action.username, role: action.role, verified: action.verified }
         })),
         on(authApiActions.loginFailure, (state, action) => ({
             ...state,
@@ -68,6 +68,24 @@ const authFeature = createFeature({
             isLoggedIn: false,
             user: null,
             validationErrors: null
+        })),
+        on(authPageActions.verifyAccount, (state) => ({
+            ...state,
+            isLoading: true,
+            isSubmitting: true
+        })),
+        on(authApiActions.verifyAccountSuccess, (state, action) => ({
+            ...state,
+            isLoading: false,
+            isLoggedIn: true,
+            user: { email: action.email, token: action.token, username: action.username, role: action.role, verified: action.verified }
+        })),
+        on(authApiActions.verifyAccountFailure, (state, action) => ({
+            ...state,
+            isLoading: false,
+            errorMessage: action.errorMessage,
+            validationErrors: action.errors,
+            user: null
         }))
     )
 })
@@ -79,5 +97,5 @@ export const {
     selectIsLoggedIn,
     selectIsLoading,
     selectUser,
-    selectValidationErrors
+    selectValidationErrors,
 } = authFeature;

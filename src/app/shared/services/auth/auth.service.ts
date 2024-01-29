@@ -40,4 +40,8 @@ export class AuthService {
     formData.append("password", body.password);
     return this._http.post<AuthResponse>(`${environment.API_URL}/auth/authenticate`, formData);
   }
+
+  public verifyAccount(id: string, code: string): Observable<AuthResponse> {
+    return this._http.post<AuthResponse>(`${environment.API_URL}/auth/${id}/verify-account/${code}`, null);
+  }
 }

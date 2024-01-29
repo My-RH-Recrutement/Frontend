@@ -18,6 +18,7 @@ import { NotFoundComponent } from "@modules/errors/pages/not-found/not-found.com
 import { PlansComponent } from "./plans/pages/plans/plans.component";
 import { enableDebugTools } from "@angular/platform-browser";
 import { CheckoutComponent } from "./plans/pages/checkout/checkout.component";
+import { VerifyAccountComponent } from "./auth/pages/verify-account/verify-account.component";
 
 const moduleRoutes: Routes = [
     {
@@ -59,6 +60,10 @@ const moduleRoutes: Routes = [
             {
                 path: "verify",
                 component: VerifyCodeComponent
+            },
+            {
+                path: ":id/verify-account/:code",
+                component: VerifyAccountComponent
             }
         ]
     },

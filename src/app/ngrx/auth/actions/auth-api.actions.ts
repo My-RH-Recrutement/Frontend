@@ -11,6 +11,8 @@ export const authApiActions = createActionGroup({
         loginSuccess: props<AuthResponse>(),
         loginFailure: props<{ errors: ValidationErrorsInterface, errorMessage: BackendErrorsInterface }>(),
         logoutSuccess: props<{ message: string }>(),
-        logoutFailure: props<{ message: string }>()
+        logoutFailure: props<{ message: string }>(),
+        verifyAccountSuccess: props<AuthResponse>(),
+        verifyAccountFailure: props<{ errors: ValidationErrorsInterface, errorMessage: BackendErrorsInterface }>()
     }
 })

@@ -1,6 +1,7 @@
 export interface AuthResponse {
-    username: string,
-    email: string,
-    role: string,
-    token: string
+    username?: string,
+    email?: string,
+    role?: string,
+    verified?: boolean,
+    token?: string
 }

@@ -10,7 +10,7 @@ export const authorizationGuard: CanActivateFn = (route, state) => {
   const store = inject(Store);
   const user = store.selectSignal(selectUser);
 
-  if(user()?.role.includes(Access.RECRUITER)) {
+  if(user()?.role?.includes(Access.RECRUITER)) {
     return true;
   }
   router.navigate(["/not-authorized"]);

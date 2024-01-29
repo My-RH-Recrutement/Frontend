@@ -118,6 +118,51 @@ export const logoutEffect = createEffect((
 
 
 /**
+ * Verify Account Effect
+ * 
+ * This effect handles the verification process of the registered user account
+ * by intercepting the 'VerifyAccount' action, calling the 'set' method from 
+ * the PersistanceService, and dispatching corresponding actions based on 
+ * the outcome either {@link authApiActions.verifyAccountSuccess} or {@link authApiActions.verifyAccountFailure}.
+ * 
+ * @param actions$ - The stream of actions in the application.
+ * @param persistanceService - The injected PersistanceService responsible for localstorage data persistence.
+ * @returns An observable of actions representing the verification process.
+ */
+export const verifyAccountEffect = createEffect((
+    actions$ = inject(Actions),
+    authService = inject(AuthService),
+    persistanceService = inject(PersistanceService)
+) => {
+    return actions$.pipe(
+        ofType(authPageActions.verifyAccount),
+        switchMap((action) => {
+            return authService.verifyAccount(action.id, action.code).pipe(
+                map((action) => {
+                    console.log(action.verified);
+                    
+                    const user = (persistanceService.get("access") as AuthResponse);
+                    console.log("verify action effect: ", user);
+                    
+                    user.verified = action.verified;
+                    persistanceService.set("access", user);
+                    return authApiActions.verifyAccountSuccess(user);
+                }),
+                catchError((errorResponse: HttpErrorResponse) => {
+                    return of(authApiActions.verifyAccountFailure(
+                        {
+                            errors: !errorResponse.error.body ? errorResponse.error : null,
+                            errorMessage: { message: errorResponse.error?.body?.detail }
+                        }
+                    ))
+                })
+            )
+        })
+    )
+}, {functional: true})
+
+
+/**
  * Redirection After Registration Effect
  * 
  * this effect handles the process of redirections after a succesfull registration by
