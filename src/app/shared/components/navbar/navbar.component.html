@@ -20,7 +20,7 @@
                         sign in
                     </a>
                     <a routerLink="/auth/login" class="capitalize">
-                        <app-button>Log in</app-button>
+                        <app-button [clickEvent]="login" >Log in</app-button>
                     </a>
                 </div>
                 <div *ngIf="isUserLoggedin()" class="navbar__info">

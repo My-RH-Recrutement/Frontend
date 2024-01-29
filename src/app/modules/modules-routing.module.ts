@@ -73,6 +73,11 @@ const moduleRoutes: Routes = [
         canActivate: [authenticationGuard, authorizationGuard],
         children: [
             {
+                path: "",
+                redirectTo: "jobs",
+                pathMatch: "full",
+            },
+            {
                 path: "jobs",
                 component: JobsComponent,
                 children: [

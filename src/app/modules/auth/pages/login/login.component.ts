@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LoginRequestInterface } from '@app/core/interfaces/requests/login-request.interface';
 import { authPageActions } from '@app/ngrx/auth/actions/auth-page.actions';
+import { selectIsLoading, selectIsSubmitting } from '@app/ngrx/auth/auth.reducer';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -11,7 +12,8 @@ import { Store } from '@ngrx/store';
 export class LoginComponent {
 
   constructor(private _store: Store) {}
-
+  isLoading = this._store.selectSignal(selectIsLoading);
+  isSubmitted = this._store.selectSignal(selectIsSubmitting);
   formInputs = {
     email: {
       id: 'email',

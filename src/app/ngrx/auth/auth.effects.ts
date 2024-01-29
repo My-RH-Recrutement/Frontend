@@ -60,6 +60,8 @@ export const registerEffect = createEffect((
  * @param authService - The injected AuthService responsible for authentication.
  * @returns An observable of actions representing the login process.
  */
+
+// todo: login must be fixed it blocked the website
 export const loginEffect = createEffect((
     actions$ = inject(Actions), 
     persistanceService = inject(PersistanceService),
@@ -67,13 +69,13 @@ export const loginEffect = createEffect((
 ) => {
     return actions$.pipe(
         ofType(authPageActions.login),
-        switchMap(action => 
+        concatMap(action => 
             authService.login(action).pipe(
                 map((user: AuthResponse) => {
                     persistanceService.set("access", user);
                     return authApiActions.loginSuccess(user);
                 }),
-                catchError((errorResponse: HttpErrorResponse) => {
+                catchError((errorResponse) => {
                     return of(
                         authApiActions.loginFailure({
                             errors: !errorResponse.error.body ? errorResponse.error : null,
@@ -214,4 +216,4 @@ export const redirectAfterLoginEffect = createEffect((
             }
         })
     )
-}, {functional: true});
+}, {functional: true, dispatch: false});

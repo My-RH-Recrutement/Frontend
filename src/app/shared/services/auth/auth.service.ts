@@ -35,10 +35,7 @@ export class AuthService {
   }
 
   public login(body: LoginRequestInterface): Observable<AuthResponse> {
-    const formData: FormData = new FormData();
-    formData.append("email", body.email);
-    formData.append("password", body.password);
-    return this._http.post<AuthResponse>(`${environment.API_URL}/auth/authenticate`, formData);
+    return this._http.post<AuthResponse>(`${environment.API_URL}/auth/authenticate`, body);
   }
 
   public verifyAccount(id: string, code: string): Observable<AuthResponse> {

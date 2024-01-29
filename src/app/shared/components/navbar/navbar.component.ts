@@ -28,4 +28,6 @@ export class NavbarComponent {
   handleLogOut = () => {
     this._store.dispatch(authPageActions.logout())
   }
+
+  login = () => {}
 }
