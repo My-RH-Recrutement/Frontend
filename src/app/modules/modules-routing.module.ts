@@ -35,10 +35,6 @@ const moduleRoutes: Routes = [
                 component: JobOffersComponent
             },
             {
-                path: "job-offers/:id",
-                component: JobOffersComponent,
-            },
-            {
                 path: 'job-offers/:id/apply',
                 component: ApplyPageComponent,
                 canActivate: [authenticationGuard]

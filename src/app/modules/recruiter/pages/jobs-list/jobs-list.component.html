@@ -9,4 +9,9 @@
         </a>
     </div>
 </div>
-<app-table></app-table>
+<div class="job-offers space-y-2">
+    <app-table [columns]="tableColumns" [data]="jobOffers()"></app-table>
+    <div class="pagination flex flex-col items-end">
+        <app-pagination url="/recruiter/jobs" [paginationInfo]="jobOffersPagination()"></app-pagination>
+    </div>
+</div>
