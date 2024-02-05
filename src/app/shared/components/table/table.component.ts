@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-table',
@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./table.component.less']
 })
 export class TableComponent {
-
+  @Input() columns: string[] = [];
+  @Input() data: any[] | undefined = [];
 }

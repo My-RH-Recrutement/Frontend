@@ -31,7 +31,8 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     ButtonComponent,
     SelectComponent,
     InputComponent,
-    TableComponent
+    TableComponent,
+    PaginationComponent
   ]
 })
 export class SharedModule { }

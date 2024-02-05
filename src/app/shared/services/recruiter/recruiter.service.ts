@@ -23,6 +23,6 @@ export class RecruiterService {
   }
 
   public verifyAccount(body: VerificationCode): Observable<Recruiter> {
-    return this._http.post<Recruiter>(`${environment.API_URL}/recruiters/verify-account`, body);
+    return this._http.post<Recruiter>(`${environment.API_URL}/auth/verify-account`, body);
   }
 }

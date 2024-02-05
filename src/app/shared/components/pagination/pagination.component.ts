@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { PageInfo } from '@app/ngrx/jobOffers/jobOffersState.interface';
 
 @Component({
   selector: 'app-pagination',
@@ -6,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./pagination.component.less']
 })
 export class PaginationComponent {
-
+  @Input() paginationInfo!: PageInfo;
+  @Input() url!: string;
 }

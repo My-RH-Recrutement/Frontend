@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { JobOffer } from '@app/core/models/job-offer';
+import { jobOffersPageActions } from '@app/ngrx/jobOffers/actions/jobOffers-page.actions';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-job-offer-card',
@@ -8,4 +10,10 @@ import { JobOffer } from '@app/core/models/job-offer';
 })
 export class JobOfferCardComponent {
   @Input() offer!: any;
+
+  constructor(private _store: Store) {}
+
+  selectJobOffer() {
+    this._store.dispatch(jobOffersPageActions.selectJob({jobOffer: this.offer}));
+  }
 }

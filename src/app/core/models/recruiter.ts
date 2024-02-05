@@ -1,8 +1,8 @@
+import { Access } from "../enums/access";
 import { JobOffer } from "./job-offer";
 import { User } from "./user";
 
 export class Recruiter extends User {
-    public password: string;
     public address: string;
     public image: string | File;
     public jobOffers: JobOffer[];
@@ -15,10 +15,11 @@ export class Recruiter extends User {
         address: string,
         image: string | File,
         jobOffers: JobOffer[],
+        role: Access,
+        isVerified: boolean,
         id?: string,
     ) {
-        super(fullName, email, phoneNumber, id);
-        this.password = password;
+        super(fullName, email, password, phoneNumber, role, isVerified, id);
         this.address = address;
         this.image = image;
         this.jobOffers = jobOffers;

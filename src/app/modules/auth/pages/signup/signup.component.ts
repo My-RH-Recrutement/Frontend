@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { RecruiterService } from '@app/shared/services';
+import { Access } from '@app/core/enums/access';
+import { RegisterRequestInterface } from '@app/core/interfaces/requests/register-request.interface';
+import { authPageActions } from '@app/ngrx/auth/actions/auth-page.actions';
+import { selectIsSubmitting } from '@app/ngrx/auth/auth.reducer';
+import { AuthStateInterface } from '@app/ngrx/auth/authState.interface';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-signup',
@@ -9,8 +13,11 @@ import { RecruiterService } from '@app/shared/services';
 })
 export class SignupComponent {
 
-  constructor(private _recruiterService: RecruiterService, private _router: Router) { }
+  constructor(private _store: Store<{ auth: AuthStateInterface }>) { }
+  access = Access;
   file!: File;
+  role:string = this.access.USER;
+  isSubmitting = this._store.selectSignal(selectIsSubmitting);
   formInputs = {
     name: {
       id: 'fulName',
@@ -21,7 +28,8 @@ export class SignupComponent {
       label: 'Full Name',
       formControll: 'fullName',
       onChange: "",
-      required: true
+      required: true,
+      error: ""
     },
     email: {
       id: 'email',
@@ -32,7 +40,8 @@ export class SignupComponent {
       label: 'Email',
       formControll: 'email',
       onChange: "",
-      required: true
+      required: true,
+      error: ""
     },
     password: {
       id: 'password',
@@ -43,7 +52,8 @@ export class SignupComponent {
       label: 'Password',
       formControll: 'password',
       onChange: "",
-      required: true
+      required: true,
+      error: ""
     },
     phone: {
       id: 'phone',
@@ -85,22 +95,15 @@ export class SignupComponent {
   }
 
   signUp = () => {
-    const formData: FormData = new FormData();
-    formData.append("fullName", this.formInputs.name.value);
-    formData.append("email", this.formInputs.email.value);
-    formData.append("phoneNumber", this.formInputs.phone.value);
-    formData.append("password", this.formInputs.password.value);
-    formData.append("image", this.file);
-    formData.append("address", this.formInputs.address.value);
-
-    this._recruiterService.create(formData).subscribe({
-      next: (res) => {
-        this._router.navigate(["/auth/verify"]);
-        console.log(res);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    })
+    const registerRequest: RegisterRequestInterface = {
+      fullName: this.formInputs.name.value,
+      address: this.formInputs.address.value,
+      email: this.formInputs.email.value,
+      password: this.formInputs.password.value,
+      phoneNumber: this.formInputs.phone.value,
+      role: this.role
+    };
+    if (registerRequest.role === this.access.RECRUITER) registerRequest.image = this.file;
+    this._store.dispatch(authPageActions.register(registerRequest))
   }
 }

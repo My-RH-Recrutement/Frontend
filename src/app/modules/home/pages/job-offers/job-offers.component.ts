@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JobOffer } from '@app/core/models/job-offer';
+import { jobOffersPageActions } from '@app/ngrx/jobOffers/actions/jobOffers-page.actions';
+import { selectCollection, selectPageInfo, selectSelectedJob } from '@app/ngrx/jobOffers/jobOffers.reducer';
 import { JobOfferService } from '@app/shared/services/job-offer/job-offer.service';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-job-offers',
@@ -9,45 +12,15 @@ import { JobOfferService } from '@app/shared/services/job-offer/job-offer.servic
   styleUrls: ['./job-offers.component.less']
 })
 export class JobOffersComponent implements OnInit {
-  constructor(private _jobOfferService: JobOfferService, private _activatedRoute: ActivatedRoute) {}
+  constructor(private _activatedRoute: ActivatedRoute, private _store: Store) {}
 
-  jobOffers!: JobOffer[];
-  jobOffer!: JobOffer;
+  jobOffers = this._store.selectSignal(selectCollection);
+  jobOffersPagination = this._store.selectSignal(selectPageInfo);
+  jobOffer = this._store.selectSignal(selectSelectedJob);
 
   ngOnInit(): void {
-    this.getAllJobOffers();
-    this._activatedRoute.params.subscribe({
-      next: ({id}) => {
-        id && this.getJobOffer(id);
-      },
-      error: (error) => {console.log(error);
-      }
+    this._activatedRoute.queryParams.subscribe(({page}) => {
+      this._store.dispatch(jobOffersPageActions.enter({page: page}));
     })
-  }
-
-  getAllJobOffers() {
-    this._jobOfferService.readAll().subscribe({
-      next: ({content}: any) => {
-        console.log(content);
-        
-        this.jobOffers = content;
-      },
-      error: (error) => {
-        console.log(error);
-      },
-      complete: () => {}
-    })
-  }
-
-  getJobOffer(id: string) {
-    if (id !== null) {
-      this._jobOfferService.readOne(id).subscribe({
-        next: (res) => {
-          this.jobOffer = res;
-        },
-        error: (error) => {console.log(error);
-        }
-      });
-    }
   }
 }

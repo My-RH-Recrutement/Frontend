@@ -11,6 +11,14 @@ import { ApplicationsComponent } from "./recruiter/pages/applications/applicatio
 import { CreateJobComponent } from "./recruiter/pages/create-job/create-job.component";
 import { JobsListComponent } from "./recruiter/pages/jobs-list/jobs-list.component";
 import { ApplyPageComponent } from "./home/pages/apply-page/apply-page.component";
+import { LoginComponent } from "@modules/auth/pages/login/login.component";
+import { authenticationGuard, authorizationGuard } from "@core/guards";
+import { NotAuthorizedPageComponent } from "./errors/pages/not-authorized-page/not-authorized-page.component";
+import { NotFoundComponent } from "@modules/errors/pages/not-found/not-found.component";
+import { PlansComponent } from "./plans/pages/plans/plans.component";
+import { enableDebugTools } from "@angular/platform-browser";
+import { CheckoutComponent } from "./plans/pages/checkout/checkout.component";
+import { VerifyAccountComponent } from "./auth/pages/verify-account/verify-account.component";
 
 const moduleRoutes: Routes = [
     {
@@ -19,15 +27,17 @@ const moduleRoutes: Routes = [
         children: [
             {
                 path: "",
+                redirectTo: "job-offers",
+                pathMatch: "full",
+            },
+            {
+                path: "job-offers",
                 component: JobOffersComponent
             },
             {
-                path: "job-offers/:id",
-                component: JobOffersComponent,
-            },
-            {
                 path: 'job-offers/:id/apply',
-                component: ApplyPageComponent
+                component: ApplyPageComponent,
+                canActivate: [authenticationGuard]
             }
         ]
     },
@@ -40,15 +50,29 @@ const moduleRoutes: Routes = [
                 component: SignupComponent
             },
             {
+                path: "login",
+                component: LoginComponent
+            },
+            {
                 path: "verify",
                 component: VerifyCodeComponent
+            },
+            {
+                path: ":id/verify-account/:code",
+                component: VerifyAccountComponent
             }
         ]
     },
     {
         path: "recruiter",
         component: DashboardComponent,
+        canActivate: [authenticationGuard, authorizationGuard],
         children: [
+            {
+                path: "",
+                redirectTo: "jobs",
+                pathMatch: "full",
+            },
             {
                 path: "jobs",
                 component: JobsComponent,
@@ -68,6 +92,29 @@ const moduleRoutes: Routes = [
                 component: ApplicationsComponent
             }
         ]
+    },
+    {
+        path: "plans",
+        component: PlansComponent
+    },
+    {
+        path: "checkout",
+        component: CheckoutComponent,
+        canActivate: [authenticationGuard, authorizationGuard]
+    },
+    {
+        path: "not-authorized",
+        component: NotAuthorizedPageComponent,
+        canActivate: [authenticationGuard]
+    },
+    {
+        path: "not-found",
+        component: NotFoundComponent
+    },
+    {
+        path: "**",
+        redirectTo: "not-found",
+        pathMatch: "full"
     }
 ];
 
